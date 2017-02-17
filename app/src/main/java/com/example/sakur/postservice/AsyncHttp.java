@@ -17,17 +17,10 @@ public class AsyncHttp extends AsyncTask<String, Integer, Boolean> {
 
     HttpURLConnection urlConnection = null;
     Boolean flg = false; // データ通信可否のフラグ
-    String name; //渡す奴
-    double value; // 渡す奴
-    double latitude;
-    double longitude;
+    double latitude;// 送る緯度データ
+    double longitude;// 送る経度データ
 
     // コンストラクタで初期化
-    public AsyncHttp(String name, double value){
-        this.name = name;
-        this.value = value;
-    }
-    // コンストラクタ２
     public AsyncHttp(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
@@ -37,19 +30,15 @@ public class AsyncHttp extends AsyncTask<String, Integer, Boolean> {
     @Override
     protected Boolean doInBackground(String... contents) {
         String urlinput = "http://10.250.6.14/upload/post.php";
-        // ローカル10.0.2.2
+        // ローカル環境の場合10.0.2.2
         try{
             URL url = new URL(urlinput);
             urlConnection = (HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true);
 
-//            urlConnection.setChunkedStreamingMode(0);
-
-//            urlConnection.connect();
-
             // POST用パラメータ
-//            String postDataSample = "name=" + name + "&text=" + value;
+            // DB上のテーブルにあるカラム名'latitude'と'longitude'に値を入れたい
             String postDataSample = "latitude="+latitude+"&longitude="+longitude;
 
             // POSTパラメータ設定
@@ -57,7 +46,6 @@ public class AsyncHttp extends AsyncTask<String, Integer, Boolean> {
             out.write(postDataSample.getBytes());
             out.flush();
             out.close();
-//            Log.d("test", postDataSample);
 
             // レスポンスを受け取る
             urlConnection.getInputStream();
